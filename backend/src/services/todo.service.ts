@@ -1,5 +1,5 @@
 import prisma from "../lib/prisma";
-import type { TodoStatus, Priority } from "@prisma/client";
+import type { TodoStatus, Priority } from "../validators/todo.validator";
 import { isOverdue } from "../utils/todo.utils";
 
 export interface GetTodosFilter {

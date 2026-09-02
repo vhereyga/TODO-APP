@@ -1,7 +1,6 @@
 import { TodoService, type GetTodosFilter } from "../services/todo.service";
-import { validateTodo, validateUpdateStatus, validateId } from "../validators/todo.validator";
+import { validateTodo, validateUpdateStatus, validateId, type TodoStatus } from "../validators/todo.validator";
 import { formatApiResponse, formatApiError } from "../utils/todo.utils";
-import type { TodoStatus } from "@prisma/client";
 
 export class TodoController {
   /**
