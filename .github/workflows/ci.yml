@@ -1,0 +1,94 @@
+name: CI Pipeline (Lint & Test)
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  backend-ci:
+    name: Backend Lint & Tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: todo_app_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: "postgresql://postgres:password@localhost:5432/todo_app_db"
+      PORT: 3000
+      NODE_ENV: test
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun Runtime
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install Backend Dependencies
+        working-directory: ./backend
+        run: bun install
+
+      - name: Lint & Typecheck Backend
+        working-directory: ./backend
+        run: bun run lint
+
+      - name: Generate Prisma Client
+        working-directory: ./backend
+        run: bun run prisma:generate
+
+      - name: Push Prisma Schema to PostgreSQL
+        working-directory: ./backend
+        run: bun run prisma:push
+
+      - name: Run Backend Unit Tests
+        working-directory: ./backend
+        run: bun run test:unit
+
+      - name: Run Backend Integration Tests
+        working-directory: ./backend
+        run: bun run test:integration
+
+      - name: Run All Tests
+        working-directory: ./backend
+        run: bun test
+
+  frontend-ci:
+    name: Frontend Lint & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun Runtime
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install Frontend Dependencies
+        working-directory: ./frontend
+        run: bun install
+
+      - name: Lint & Typecheck Frontend
+        working-directory: ./frontend
+        run: bun run lint
+
+      - name: Build Frontend Application
+        working-directory: ./frontend
+        run: bun run build

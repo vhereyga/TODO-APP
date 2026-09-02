@@ -1,0 +1,28 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "start": "bun src/index.ts",
+    "test": "bun test",
+    "test:unit": "bun test tests/unit",
+    "test:integration": "bun test tests/integration",
+    "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit",
+    "prisma:generate": "bunx prisma generate",
+    "prisma:migrate": "bunx prisma migrate dev",
+    "prisma:push": "bunx prisma db push",
+    "prisma:studio": "bunx prisma studio"
+  },
+  "dependencies": {
+    "@elysiajs/cors": "^1.2.0",
+    "@prisma/client": "^6.4.1",
+    "elysia": "^1.2.25"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "prisma": "^6.4.1",
+    "typescript": "^5.7.3"
+  }
+}
