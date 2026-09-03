@@ -2,11 +2,11 @@ FROM oven/bun:1-slim AS base
 WORKDIR /app
 
 # Copy dependency files
-COPY package.json bun.lock ./
+COPY package.json ./
 COPY prisma ./prisma/
 
 # Install dependencies and generate Prisma Client
-RUN bun install --frozen-lockfile
+RUN bun install
 RUN bunx prisma generate
 
 # Copy source files

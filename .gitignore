@@ -19,8 +19,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-bun.lockb
-bun.lock
 
 # IDE & OS
 .vscode/
