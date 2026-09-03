@@ -1,7 +1,9 @@
 import type { Todo, DashboardStats, ApiResponse, TodoFormData, TodoFilters } from "../types/todo";
 
-// Base API URL sesuai Bab VI SRS: http://localhost:3000/api
-const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || "http://localhost:3000/api";
+// Base API URL sesuai Bab VI SRS
+const rawApiUrl = (import.meta as any).env?.VITE_API_URL || "http://localhost:3000/api";
+const cleanBaseUrl = rawApiUrl.replace(/\/+$/, "");
+const API_BASE_URL = cleanBaseUrl.endsWith("/api") ? cleanBaseUrl : `${cleanBaseUrl}/api`;
 
 class ApiError extends Error {
   constructor(public message: string, public status?: number) {
@@ -10,8 +12,28 @@ class ApiError extends Error {
   }
 }
 
+async function parseResponse<T>(response: Response): Promise<T> {
+  const contentType = response.headers.get("content-type");
+  if (!contentType || !contentType.includes("application/json")) {
+    const text = await response.text();
+    console.error("Non-JSON API Response:", text);
+    throw new ApiError(
+      `Server mengembalikan response non-JSON (Status ${response.status}). Pastikan backend Railway aktif dan VITE_API_URL benar.`,
+      response.status
+    );
+  }
+
+  const data: ApiResponse<T> = await response.json();
+  if (!response.ok || !data.success) {
+    throw new ApiError(data.message || `Request failed with status ${response.status}`, response.status);
+  }
+
+  return data.data as T;
+}
+
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-  const url = `${API_BASE_URL}${endpoint}`;
+  const formattedEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  const url = `${API_BASE_URL}${formattedEndpoint}`;
   
   const headers = {
     "Content-Type": "application/json",
@@ -20,13 +42,7 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
 
   try {
     const response = await fetch(url, { ...options, headers });
-    const data: ApiResponse<T> = await response.json();
-
-    if (!response.ok || !data.success) {
-      throw new ApiError(data.message || `Request failed with status ${response.status}`, response.status);
-    }
-
-    return data.data as T;
+    return await parseResponse<T>(response);
   } catch (error: any) {
     if (error instanceof ApiError) {
       throw error;
@@ -92,16 +108,9 @@ export const todoApi = {
    * Menghapus Todo (Bab 6.5 SRS)
    */
   async deleteTodo(id: number): Promise<{ success: boolean; message: string }> {
-    const url = `${API_BASE_URL}/todos/${id}`;
-    const response = await fetch(url, {
+    return request<{ success: boolean; message: string }>(`/todos/${id}`, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
     });
-    const data = await response.json();
-    if (!response.ok || !data.success) {
-      throw new ApiError(data.message || "Gagal menghapus Todo", response.status);
-    }
-    return data;
   },
 
   /**
