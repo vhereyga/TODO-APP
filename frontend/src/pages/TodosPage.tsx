@@ -65,10 +65,10 @@ export const TodosPage: React.FC<Props> = ({
   return (
     <div>
       {/* Header Page Title */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.5rem" }}>
+      <div className="page-header">
         <div>
-          <h1 style={{ fontSize: "1.85rem", marginBottom: "0.25rem" }}>Daftar Tugas & Todo</h1>
-          <p style={{ color: "var(--text-secondary)", fontSize: "0.92rem" }}>
+          <h1 className="page-title">Daftar Tugas & Todo</h1>
+          <p className="page-subtitle">
             Cari, filter, kelola prioritas, dan ubah status tugas Anda.
           </p>
         </div>

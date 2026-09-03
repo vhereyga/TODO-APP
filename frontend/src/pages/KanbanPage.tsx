@@ -148,10 +148,10 @@ export const KanbanPage: React.FC<Props> = ({
 
   return (
     <div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.5rem" }}>
+      <div className="page-header">
         <div>
-          <h1 style={{ fontSize: "1.85rem", marginBottom: "0.25rem" }}>Kanban Task Board</h1>
-          <p style={{ color: "var(--text-secondary)", fontSize: "0.92rem" }}>
+          <h1 className="page-title">Kanban Task Board</h1>
+          <p className="page-subtitle">
             Tarik dan lepas (Drag & Drop) kartu untuk memperbarui status pekerjaan.
           </p>
         </div>

@@ -44,19 +44,7 @@ export const DashboardPage: React.FC<Props> = ({
   return (
     <div>
       {/* Hero Welcome Banner */}
-      <div
-        className="glass-card"
-        style={{
-          marginBottom: "2rem",
-          background: "linear-gradient(135deg, rgba(79, 70, 229, 0.12) 0%, rgba(6, 182, 212, 0.1) 100%)",
-          border: "1px solid var(--border-color)",
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: "1.5rem",
-        }}
-      >
+      <div className="glass-card hero-banner">
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.4rem" }}>
             <span
@@ -76,7 +64,7 @@ export const DashboardPage: React.FC<Props> = ({
               Full-Stack Todo Dashboard
             </span>
           </div>
-          <h1 style={{ fontSize: "2rem", marginBottom: "0.4rem" }}>Selamat Datang di TaskMaster!</h1>
+          <h1 className="hero-title">Selamat Datang di TaskMaster!</h1>
           <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", maxWidth: "600px" }}>
             Kelola tugas Anda secara efisien, pantau progress harian, dan selesaikan target tepat waktu.
           </p>
@@ -140,7 +128,7 @@ export const DashboardPage: React.FC<Props> = ({
       </div>
 
       {/* Progress Metric & Recent Todos Grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "1.5rem" }}>
+      <div className="dashboard-bottom-grid">
         {/* Progress Card */}
         <div className="glass-card">
           <h3 style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>Progress Penyelesaian</h3>

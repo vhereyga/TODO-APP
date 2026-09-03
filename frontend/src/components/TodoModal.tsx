@@ -135,7 +135,7 @@ export const TodoModal: React.FC<Props> = ({
             />
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+          <div className="form-row-2">
             <div className="form-group">
               <label htmlFor="todo-priority" style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
                 <Flag size={16} />
